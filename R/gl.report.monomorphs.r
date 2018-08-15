@@ -6,6 +6,7 @@
 #' Retaining monomorphic loci unnecessarily increases the size of the dataset.
 #'
 #' @param gl -- name of the input genlight object [required]
+#' @param progress -- Option (default = TRUE) to have a progress bar on report. Mainly turn off for Rmarkdown.
 #' @return A report on loci, polymorphic, monomorphic, all NAs
 #' @import adegenet plyr utils
 #' @export
@@ -13,7 +14,7 @@
 #' @examples
 #' gl2 <- gl.report.monomorphs(testset.gl)
 
-gl.report.monomorphs <- function (gl) {
+gl.report.monomorphs <- function (gl, progress=TRUE) {
 
   x <- gl
 
@@ -33,8 +34,8 @@ gl.report.monomorphs <- function (gl) {
   for (i in 1:nLoc(x)) {d[i] <- NA}
   
 # Set up the progress counter
-  pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
-  getTxtProgressBar(pb)
+  if(progress==TRUE){pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
+  getTxtProgressBar(pb)}
 # Identify polymorphic, monomorphic and 'all na' loci
   # Set a,b,c,d <- TRUE if monomorphic, or if all NAs
   xmat <-as.matrix(x)
@@ -51,7 +52,7 @@ gl.report.monomorphs <- function (gl) {
       d[i] <- FALSE
     }
     ##cat(xmat[,i],a[i],b[i],c[i],d[i],"\n")
-    setTxtProgressBar(pb, i/nLoc(x))
+    if(progress==TRUE){setTxtProgressBar(pb, i/nLoc(x))}
   }
   s1 <- sum(a,na.rm=TRUE) + sum(b,na.rm=TRUE) + sum(c,na.rm=TRUE)
   s2 <- s1 - sum(d,na.rm=TRUE)
