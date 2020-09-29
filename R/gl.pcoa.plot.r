@@ -198,7 +198,11 @@ gl.pcoa.plot <- function(glPca,
       labels <- "pop"
     }  
     
-  # If individual labels
+    #New plotting window
+      dev.new()
+
+    
+    # If individual labels
 
     if (labels == "ind") {
       if (verbose>0) cat("  Plotting individuals\n")
